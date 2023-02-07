@@ -8,6 +8,7 @@ import "./Ownable.sol";
 contract MoonInkMedals is ERC1155, Ownable {
     string name_;
     string symbol_;
+    bool[] AllmintedData;
 
     mapping(address => mapping(uint256 => bool)) minted;
 
@@ -36,13 +37,21 @@ contract MoonInkMedals is ERC1155, Ownable {
                 break;
             }
         }
+        require(id != 0, "max mint triggred");
         _mint(_msgSender(), id, 1, "");
         minted[_msgSender()][id] = true;
         return (true);
     }
 
     function getminted(address user, uint256 id) public view returns (bool) {
-        return minted[user][id];
+        return (minted[user][id]);
+    }
+
+    function getAllMinted(address user) public returns (bool[] memory) {
+        for (uint256 i = 1; i <= 5; i++) {
+            AllmintedData.push(minted[user][i]);
+        }
+        return AllmintedData;
     }
 
     function uri(uint256 _tokenid)
